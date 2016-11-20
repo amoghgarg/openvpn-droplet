@@ -1,0 +1,5 @@
+proto tcp-client
+port 1194
+dev tun
+redirect-gateway def1
+ifconfig 10.4.0.2 10.4.0.1
