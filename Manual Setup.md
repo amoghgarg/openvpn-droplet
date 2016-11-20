@@ -1,13 +1,20 @@
 #### Set up the VPN server manually
-This section will help you set up the VPN server manually. Doing this manually will atleast once will show you what the script `create.py` is doing.
-First you need to finish the one time set up described (here)[Initial Setup]. Follow this guide after that:
-1. [Create](https://cloud.digitalocean.com/droplets/new]) a new droplet/server on DigitalOcean. Choose Ubuntu distro, $5/month size. Do not forget to ADD the SSH keys you uploaded earlier to DigitalOcean console. You can leave all the options unchecked.
-1. After the Droplet is created, [find](https://cloud.digitalocean.com/droplets) out its IP Address.
-1. SSH into the new droplet
+
+This section will help you set up the VPN server manually.    
+Doing this manually will atleast once will show you what the script `create.py` is doing.
+
+First you need to finish the one time set up described [here](https://github.com/amoghgarg1990/openvpn-droplet#initial-setup).    
+Follow this guide after that:
+
+1. [Create](https://cloud.digitalocean.com/droplets/new) a new droplet/server on DigitalOcean. Choose Ubuntu distro, $5/month size. Do not forget to ADD the SSH keys you uploaded earlier to DigitalOcean console. You can leave all other options unchecked.
+1. After the Droplet is created, [find out](https://cloud.digitalocean.com/droplets) its IP Address.
+1. SSH into the new droplet. You may need to wait upto a minute for the droplet to be ready.
+
     ```
     local:$ ssh root@<ip address>
     ```
 1. Once inside the droplet, run the following commands. Notice that the last command will create a key to access the vpn.
+
     ```
     remote:$ sudo apt-get install openvpn
     remote:$ sudo modprobe iptable_nat
@@ -17,6 +24,7 @@ First you need to finish the one time set up described (here)[Initial Setup]. Fo
     remote:$ openvpn --genkey --secret static.key
     ```
 1. Create a server conf file `/etc/openvpn/server.conf` in the **remote** droplet with the following content:
+
     ```
     port 1194
     proto tcp-server
@@ -26,12 +34,14 @@ First you need to finish the one time set up described (here)[Initial Setup]. Fo
     verb 3
     secret  vpn.key
     ```
-1. Start the openvpn daemon on the remote server
+1. Start the openvpn daemon on the remote server   
+
     ```
     remote:$  sudo service openvpn@server start
     ```
 1. Copy the `/etc/openvpn/static.key` file you created just a moment ago to your local machine. `remote:$ cat /etc/openvpn/static.key` will show you the contents on the terminal, you can copy paste this and save to a local file `static.key`.
 1. Create a local `client.conf` file with the following content. Replace the IP address and the secret path.
+
     ```
     proto tcp-client
     port 1194
